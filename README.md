@@ -42,10 +42,12 @@ Please (do your best to) stick to [Google's C++ style guide](https://google.gith
 
 ## Outputs
 
+Fig 1 shows the position tracking result from data-1 fed into my EKF system. As can be seen, overall positions are well estimated besides the very first estimate. It results in RMSE = [0.118302, 0.127747]
+![alt text](img/trackingpos4output1.png "Fig 1: Tracking Position")
 
-![alt text](img/trackingpos4output1.png)
-![alt text](img/trackingvel4output1.png)
+Fig 2 shows the velocity tracking result from data-1. The velocity represents the hidden state. As can be seen, velocity estimates generally follow ground truth, but some points are still derailed, which is to be improvded. In this case, RMSE results in [0.890992, 0.893975].
+![alt text](img/trackingvel4output1.png "Fig 2: Tracking Velocity")
 
 ## Limitations
 
-One of the criteria for the acceptance is that the px, py output coordinates have an RMSE <= [0.8, 0.8, 0.26, 0.28] compared to the ground truth. However, my current EKF system for input1 and input2 generates RMSE: [0.118302, 0.127747, 0.890992, 0.893975] and RMSE: [0.271576, 0.248183, 0.690414, 1.72971], respectively. As can be seen, the hidden part of the state, i.e., velocity x and velocity y, should be improvded.
+One of the criteria for the acceptance is that the px, py output coordinates have an RMSE <= [0.8, 0.8, 0.26, 0.28] compared to the ground truth. However, my current EKF system for data-1 and data-2 generates RMSE: [0.118302, 0.127747, 0.890992, 0.893975] and RMSE: [0.271576, 0.248183, 0.690414, 1.72971], respectively. As can be seen, the hidden part of the state, i.e., velocity x and velocity y, should be improvded.
