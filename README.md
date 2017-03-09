@@ -1,6 +1,8 @@
 # Project 1: Extended Kalman Filter
-Self-Driving Car Engineer Nanodegree Program
 
+This project is about a system that tracks objects like vehicles and/or pedestrians with their position and velocity with Extended Kalman Filter (EKF) applied. There are two types of input data from RADAR and LIDAR sensors. The data from the RADAR sensor consists of a tuple of (range, angle, range rate), whereas the other consists of a tuple of (position x, position y). The state of the filter is represented as a tuple of (position x, position y, velocity x, velocity y), given the conversion of the polar coordinate into cartesian for the RADAR data.
+
+The EKF systrem is divided into prediction and measurement update. The prediction is the motion process where the state is convoluted through the state transition matrix F, while the measurement upate corrects the state w.r.t. the measurement via the update matrix H, where Jacobian matrix Hj instead of H is used for the RADAR data. Whichever of RADAR and LIDAR data is available, it applies first to EKF.
 
 ---
 
@@ -30,6 +32,7 @@ Whenever the code is modified, repeat Steps 3 and 4.
 
 ## Editor Settings
 
+The code follows
 * indent using spaces
 * set tab width to 2 spaces (keeps the matrices in source code aligned)
 
@@ -37,11 +40,12 @@ Whenever the code is modified, repeat Steps 3 and 4.
 
 Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
 
-## Project Instructions and Rubric
+## Outputs
 
-Note: regardless of the changes you make, your project must be buildable using
-cmake and make!
 
-More information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/12dd29d8-2755-4b1b-8e03-e8f16796bea8)
-for instructions and the project rubric.
+![alt text](img/trackingpos4output1.png)
+![alt text](img/trackingvel4output1.png)
+
+## Limitations
+
+One of the criteria for the acceptance is that the px, py output coordinates have an RMSE <= [0.8, 0.8, 0.26, 0.28] compared to the ground truth. However, my current EKF system for input1 and input2 generates RMSE: [0.118302, 0.127747, 0.890992, 0.893975] and RMSE: [0.271576, 0.248183, 0.690414, 1.72971], respectively. As can be seen, the hidden part of the state, i.e., velocity x and velocity y, should be improvded.
