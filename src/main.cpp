@@ -169,7 +169,7 @@ int main(int argc, char* argv[]) {
   // compute the accuracy (RMSE)
   Tools tools;
   cout << "Accuracy - RMSE:" << endl << tools.CalculateRMSE(estimations, ground_truth) << endl;
-  cout <<"should be better than [0.8, 0.8, 0.26, 0.28]" << endl;
+  //cout <<"It should be better than [0.07, 0.07, 0.60, 0.60]" << endl;
   // close files
   if (out_file_.is_open()) {
     out_file_.close();
