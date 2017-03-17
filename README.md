@@ -43,6 +43,7 @@ Please (do your best to) stick to [Google's C++ style guide](https://google.gith
 ## Outputs
 
 When we run the app (which corresponds to Step 4 in Basic Build Instructions), it returns:
+
 ![alt text](img/output1.png)
 
 Fig 1 shows the position tracking result from data-1 fed into my EKF system. As can be seen, overall positions are well estimated besides the very first estimate. It results in RMSE = [0.02896, 0.0292602]
