@@ -26,7 +26,7 @@ The EKF systrem is divided into prediction and measurement update. The predictio
 3. Compile: `cmake .. && make`
 4. Run it: `./ExtendedKF path/to/input.txt path/to/output.txt`. You can find
    some sample inputs in 'data/'.
-    - eg. `./ExtendedKF ../data/sample-laser-radar-measurement-data-1.txt ../data/output.txt`
+    - eg. `./ExtendedKF ../data/sample-laser-radar-measurement-data-1.txt ../data/output1.txt`
 
 Whenever the code is modified, repeat Steps 3 and 4.
 
@@ -42,6 +42,9 @@ Please (do your best to) stick to [Google's C++ style guide](https://google.gith
 
 ## Outputs
 
+When we run the app (which corresponds to Step 4 in Basic Build Instructions), it returns:
+![alt text](img/output1.png)
+
 Fig 1 shows the position tracking result from data-1 fed into my EKF system. As can be seen, overall positions are well estimated besides the very first estimate. It results in RMSE = [0.02896, 0.0292602]
 ![alt text](img/trackingpos4output1.png "Fig 1: Tracking Position")
 
@@ -52,4 +55,5 @@ Fig 2 shows the velocity tracking result from data-1. The velocity represents th
 
 In the radar update step, the Jacobian matrix Hj (Jacobian matrix) is used to calculate S, K and P, but **not y**. To calculate y, we use the following equations that map the predicted location x' from Cartesian coordinates to polar coordinates:
 ![alt text](img/hx.png)
-Therefore, For lidar, we can use the H matrix for calculating y, S, K and P. For radar, Hj can be used to calculate S, K and P.
+
+Therefore, for lidar we can use the H matrix for calculating y, S, K and P. For radar Hj can be used to calculate S, K and P.
