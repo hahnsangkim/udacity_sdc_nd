@@ -1,11 +1,19 @@
+#include <iostream>
 #include "kalman_filter.h"
 #include "tools.h"
+using namespace std;
 
 KalmanFilter::KalmanFilter() {
   x_ = VectorXd(4);
-  P_ = MatrixXd(4, 4);
+  x_.fill(0.0);
+  P_  = MatrixXd(4, 4);
+  P_.fill(0.0);
   F_ = MatrixXd(4, 4);
+  F_.fill(0.0);
   Q_ = MatrixXd(4, 4);
+  Q_.fill(0.0);
+  NIS_radar_ = 0;
+  NIS_laser_ = 0;
 }
 
 KalmanFilter::~KalmanFilter() {}
@@ -46,6 +54,8 @@ void KalmanFilter::Update(const VectorXd &z) {
   long x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
+  //calculate NIS
+  NIS_laser_ = y.transpose() * S.inverse() * y;
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
@@ -57,17 +67,22 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   MatrixXd Hj_ = MatrixXd(3, 4);
   Hj_ = tools.CalculateJacobian(x_);
   VectorXd hx = VectorXd(3);
-  hx << sqrt(x_(0)*x_(0) + x_(1)*x_(1)),
-        atan(x_(1)/x_(0)),
+  int iszero = x_(0) + x_(1);
+  if (iszero!=0) {
+    hx << sqrt(x_(0)*x_(0) + x_(1)*x_(1)),
+        atan2(x_(1), x_(0)),
         (x_(0)*x_(2) + x_(1)*x_(3))/sqrt(x_(0)*x_(0) + x_(1)*x_(1));
-  VectorXd y = z - hx;
-  MatrixXd Ht = Hj_.transpose();
-  MatrixXd S = Hj_ * P_ * Ht + R_;
-  MatrixXd Si = S.inverse();
-  MatrixXd K = P_ * Ht * Si;
-  //new estimate
-  x_ = x_ + (K * y);
-  long x_size = x_.size();
-  MatrixXd I = MatrixXd::Identity(x_size, x_size);
-  P_ = (I - K * Hj_) * P_;
+    VectorXd y = z - hx;
+    MatrixXd Ht = Hj_.transpose();
+    MatrixXd S = Hj_ * P_ * Ht + R_;
+    MatrixXd Si = S.inverse();
+    MatrixXd K = P_ * Ht * Si;
+    //new estimate
+    x_ = x_ + (K * y);
+    long x_size = x_.size();
+    MatrixXd I = MatrixXd::Identity(x_size, x_size);
+    P_ = (I - K * Hj_) * P_;
+    //calculate NIS
+    NIS_radar_ = y.transpose() * S.inverse() * y;
+  } 
 }

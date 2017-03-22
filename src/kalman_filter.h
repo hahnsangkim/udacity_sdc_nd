@@ -26,6 +26,9 @@ public:
   // measurement covariance matrix
   MatrixXd R_;
 
+  double NIS_radar_;
+  double NIS_laser_;
+
   /**
    * Constructor
    */

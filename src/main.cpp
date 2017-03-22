@@ -160,15 +160,18 @@ int main(int argc, char* argv[]) {
     out_file_ << gt_pack_list[k].gt_values_(0) << "\t";
     out_file_ << gt_pack_list[k].gt_values_(1) << "\t";
     out_file_ << gt_pack_list[k].gt_values_(2) << "\t";
-    out_file_ << gt_pack_list[k].gt_values_(3) << "\n";
+    out_file_ << gt_pack_list[k].gt_values_(3) << "\t";
 
     estimations.push_back(fusionEKF.ekf_.x_);
     ground_truth.push_back(gt_pack_list[k].gt_values_);
+    out_file_ << fusionEKF.count << "\t";
+    out_file_ << fusionEKF.ekf_.NIS_laser_ << "\t";
+    out_file_ << fusionEKF.ekf_.NIS_radar_ << "\n";
   }
 
   // compute the accuracy (RMSE)
   Tools tools;
-  cout << "Accuracy - RMSE:" << endl << tools.CalculateRMSE(estimations, ground_truth) << endl;
+  cout << "EKF Accuracy - RMSE:" << endl << tools.CalculateRMSE(estimations, ground_truth) << endl;
   //cout <<"It should be better than [0.07, 0.07, 0.60, 0.60]" << endl;
   // close files
   if (out_file_.is_open()) {
