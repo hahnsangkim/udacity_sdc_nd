@@ -58,3 +58,9 @@ In the radar update step, the Jacobian matrix Hj (Jacobian matrix) is used to ca
 ![alt text](img/hx.png)
 
 Therefore, for lidar we can use the H matrix for calculating y, S, K and P. For radar Hj can be used to calculate S, K and P.
+
+## Suggestions
+
+If you see the velocity errors are just a little bit too high, please do
+- Check that noise models (i.e. R for each sensor type, and Q) are correctly modeling the respective sensor types - refer back to the Udacity lectures for the correct models to use.
+- Check the initializations of important matrices are correct (i.e. F, H and P) - look for typos, and outright errors. Make sure the values are sensible.
