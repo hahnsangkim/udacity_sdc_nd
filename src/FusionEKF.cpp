@@ -85,9 +85,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     //create and initialize state covariance matrix P
     ekf_.P_ << 1, 0, 0, 0,
                0, 1, 0, 0,
-               0, 0, 1, 0,
-               0, 0, 0, 1;
-    ekf_.P_ = ekf_.P_ * 0.0001;
+               0, 0, 1000, 0,
+               0, 0, 0, 1000;
+    //ekf_.P_ = ekf_.P_ * 0.0001;
     //create state transition matrix
     // done initializing, no need to predict or update
     is_initialized_ = true;
@@ -143,7 +143,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   } else {
     // Laser updates
     ekf_.H_ = H_laser_;
-    ekf_.R_ = R_laser_ * PI*PI*1.01 /100000.0;
+    ekf_.R_ = R_laser_ * 0.0225;//PI*PI*1.01 /100000.0;
     ekf_.Update(measurement_pack.raw_measurements_);
   }
   count += 1;
