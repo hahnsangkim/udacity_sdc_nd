@@ -172,7 +172,8 @@ int main(int argc, char* argv[]) {
   // compute the accuracy (RMSE)
   Tools tools;
   cout << "EKF Accuracy - RMSE:" << endl << tools.CalculateRMSE(estimations, ground_truth) << endl;
-  //cout <<"It should be better than [0.07, 0.07, 0.60, 0.60]" << endl;
+  cout <<"be better than [0.08, 0.08, 0.60, 0.60] for 1" << endl;
+  cout <<"be better than [0.20, 0.20, 0.50, 0.85] for 2" << endl;
   // close files
   if (out_file_.is_open()) {
     out_file_.close();
