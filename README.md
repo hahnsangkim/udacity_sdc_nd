@@ -3,6 +3,7 @@
 The project "unscented Kalman filter (UKF)" is based on the same structure as the extended Kalman filter. It uses a main file that calls a function called ProcessMeasurement. Anything important happens in this function. The function is part of the class UKF.
 
 UKF consists of the prediction with a process model and the update with a measurement model. The prediction is characterized generating sigma points, predicting sigma points, and predicting mean and covariance. The update updates the state and the covariance based on the measurement from RADAR and LIDAR sensors.
+
 ---
 
 ## Dependencies
