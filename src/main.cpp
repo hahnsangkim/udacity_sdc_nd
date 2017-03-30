@@ -158,6 +158,8 @@ int main(int argc, char* argv[]) {
   // used to compute the RMSE later
   vector<VectorXd> estimations;
   vector<VectorXd> ground_truth;
+  size_t NIS_radar = 0;
+  size_t NIS_laser = 0;
 
   size_t number_of_measurements = measurement_pack_list.size();
 
@@ -187,12 +189,18 @@ int main(int argc, char* argv[]) {
       // p1, p2 - meas
       out_file_ << measurement_pack_list[k].raw_measurements_(0) << "\t";
       out_file_ << measurement_pack_list[k].raw_measurements_(1) << "\t";
+      if ( (0.35 <= ukf.NIS_laser_) && (ukf.NIS_laser_ <= 5.99)) {
+      NIS_laser++;
+      }
     } else if (measurement_pack_list[k].sensor_type_ == MeasurementPackage::RADAR) {
       // output the estimation in the cartesian coordinates
       float ro = measurement_pack_list[k].raw_measurements_(0);
       float phi = measurement_pack_list[k].raw_measurements_(1);
       out_file_ << ro * cos(phi) << "\t"; // p1_meas
       out_file_ << ro * sin(phi) << "\t"; // p2_meas
+      if ( (0.35 <= ukf.NIS_radar_) && (ukf.NIS_radar_ <= 7.81)) {
+      NIS_radar++;
+     }
     }
 
     // output the ground truth packages
@@ -206,15 +214,22 @@ int main(int argc, char* argv[]) {
     // output NIS_radar_ and NIS_laser_
     //expected_NIS_radar_ = 7.815;
     //expected_NIS_laser_ = 5.991;
-    out_file_ << ukf.count << "\t";
+    out_file_ << ukf.lcount << "\t";
     out_file_ << ukf.NIS_laser_ << "\t";
+    out_file_ << ukf.rcount << "\t";
     out_file_ << ukf.NIS_radar_ << "\n";
   }
 
   // compute the accuracy (RMSE)
   cout << "Accuracy - RMSE:" << endl << CalculateRMSE(estimations, ground_truth) << endl;
-  cout <<"should be better than [0.8, 0.8, 0.26, 0.28]" 
-  << endl;
+  //float NISradar = NIS_radar/(float) ukf.rcount * 100;
+  cout <<"be better than [0.0750, 0.0732, 0.488, 0.537] for 1" << endl;
+  cout <<"be better than [0.179, 0.190, 0.439, 0.843] for 2" << endl;
+  cout <<"The radar NIS btw 0.35 and 7.81 accounts for " << NIS_radar/(float) ukf.rcount * 100 << "%" << endl;
+  cout << NIS_radar << " " << ukf.rcount << endl;
+  //float NISlaser = NIS_laser/(float) ukf.lcount * 100;
+  cout <<"The laser NIS btw 0.35 and 5.99 accounts for " << NIS_laser/(float) ukf.lcount * 100 << "%" << endl;
+  cout << NIS_laser << " " << ukf.lcount << endl;
   
   // close files
   if (out_file_.is_open()) {
@@ -225,6 +240,5 @@ int main(int argc, char* argv[]) {
     in_file_.close();
   }
 
-  cout << "Done!" << endl;
   return 0;
 }

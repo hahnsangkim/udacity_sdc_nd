@@ -1,5 +1,8 @@
 # P2: Unscented Kalman Filter
 
+The project "unscented Kalman filter (UKF)" is based on the same structure as the extended Kalman filter. It uses a main file that calls a function called ProcessMeasurement. Anything important happens in this function. The function is part of the class UKF.
+
+UKF consists of the prediction with a process model and the update with a measurement model. The prediction is characterized generating sigma points, predicting sigma points, and predicting mean and covariance. The update updates the state and the covariance based on the measurement from RADAR and LIDAR sensors.
 ---
 
 ## Dependencies
@@ -15,7 +18,10 @@
 3. Compile: `cmake .. && make`
 4. Run it: `./UnscentedKF path/to/input.txt path/to/output.txt`. You can find
    some sample inputs in 'data/'.
-    - eg. `./UnscentedKF ../data/sample-laser-radar-measurement-data-1.txt output.txt`
+    - `./UnscentedKF ../data/sample-laser-radar-measurement-data-1.txt ukfoutput1.txt`
+    - `./UnscentedKF ../data/sample-laser-radar-measurement-data-2.txt ukfoutput2.txt`
+
+Whenever the code is modified, repeat Steps 3 and 4.
 
 ## Editor Settings
 
@@ -30,16 +36,24 @@ using the following settings:
 
 Please stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html) as much as possible.
 
-## Generating Additional Data
+## Outputs
 
-This is optional!
+When we run `./UnscentedKF ../data/sample-laser-radar-measurement-data-1.txt ukfoutput1.txt`, it returns:
 
-If you'd like to generate your own radar and lidar data, see the
-[utilities repo](https://github.com/udacity/CarND-Mercedes-SF-Utilities) for
-Matlab scripts that can generate additional data.
+![alt text](img/ukfoutput1.png)
 
-## Project Instructions and Rubric
+and `./UnscentedKF ../data/sample-laser-radar-measurement-data-2.txt ukfoutput2.txt` returns
 
-This information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/c3eb3583-17b2-4d83-abf7-d852ae1b9fff/concepts/4d0420af-0527-4c9f-a5cd-56ee0fe4f09e)
-for instructions and the project rubric.
+![alt text](img/ukfoutput2.png)
+
+Fig 1 shows the position tracking result from data-1 fed into my UKF system. As can be seen, overall positions are well estimated besides the very first estimate. 
+![alt text](img/trackingpos4output1.png "Fig 1: Tracking Position")
+
+Fig 2 shows the velocity tracking result from data-1. The velocity represents the hidden state. As can be seen, velocity estimates generally follow ground truth.
+![alt text](img/trackingvel4output1.png "Fig 2: Tracking Velocity")
+
+## Suggestions
+
+If you see the velocity errors are just a little bit too high, please do
+- Check that noise models (i.e. R for each sensor type, and Q) are correctly modeling the respective sensor types - refer back to the Udacity lectures for the correct models to use.
+- Check the initializations of important matrices are correct (i.e. F, H and P) - look for typos, and outright errors. Make sure the values are sensible.

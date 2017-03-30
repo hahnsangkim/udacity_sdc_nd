@@ -22,9 +22,11 @@ public:
 
   ///* state vector: [pos1 pos2 vel_abs yaw_angle yaw_rate] in SI units and rad
   VectorXd x_;
+  VectorXd x_pre;
 
   ///* state covariance matrix
   MatrixXd P_;
+  MatrixXd P_pre;
 
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
@@ -66,13 +68,14 @@ public:
   double lambda_;
 
   ///* the current NIS for radar
-  double NIS_radar_;
+  size_t NIS_radar_;
 
   ///* the current NIS for laser
-  double NIS_laser_;
+  size_t NIS_laser_;
 
   /// debug
-  long count;
+  size_t rcount;
+  size_t lcount; 
 
   /**
    * Constructor
