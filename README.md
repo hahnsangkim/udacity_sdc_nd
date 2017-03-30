@@ -52,9 +52,3 @@ Fig 1 shows the position tracking result from data-1 fed into my UKF system. As 
 
 Fig 2 shows the velocity tracking result from data-1. The velocity represents the hidden state. As can be seen, velocity estimates generally follow ground truth.
 ![alt text](img/trackingvel4output1.png "Fig 2: Tracking Velocity")
-
-## Suggestions
-
-If you see the velocity errors are just a little bit too high, please do
-- Check that noise models (i.e. R for each sensor type, and Q) are correctly modeling the respective sensor types - refer back to the Udacity lectures for the correct models to use.
-- Check the initializations of important matrices are correct (i.e. F, H and P) - look for typos, and outright errors. Make sure the values are sensible.
