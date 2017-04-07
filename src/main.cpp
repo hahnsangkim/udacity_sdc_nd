@@ -234,6 +234,10 @@ int main(int argc, char* argv[]) {
     } else {
       cout <<"Ref2 = [0.179 0.190 0.439 0.843]" << endl;
     }
+    cout <<"radar NIS btw 0.35 and 7.81"; 
+    cout << " (" << rNIS << " = " << NIS_radar << "/" << ukf.rcount << ")" << endl;
+    cout <<"laser NIS btw 0.35 and 5.99"; 
+    cout << " (" << lNIS << " = " << NIS_laser << "/" << ukf.lcount << ")" << endl;
     cout << "Configuration parameters: " << endl;
     cout << "std_a_ = " << ukf.std_a_ << endl;
     cout << "std_yawdd_ = " << ukf.std_yawdd_ << endl;
@@ -241,10 +245,6 @@ int main(int argc, char* argv[]) {
     cout << "std_radr_ =" << ukf.std_radr_ << endl;
     cout << "std_radphi_ =" << ukf.std_radphi_ << endl;
     cout << "std_radrd_ =" << ukf.std_radrd_ << endl;  
-    cout <<"radar NIS btw 0.35 and 7.81"; 
-    cout << " (" << rNIS << " = " << NIS_radar << "/" << ukf.rcount << ")" << endl;
-    cout <<"laser NIS btw 0.35 and 5.99"; 
-    cout << " (" << lNIS << " = " << NIS_laser << "/" << ukf.lcount << ")" << endl;
   }  
   // close files
   if (out_file_.is_open()) {
