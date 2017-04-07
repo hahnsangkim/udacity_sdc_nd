@@ -11,6 +11,7 @@ using std::vector;
  * Initializes Unscented Kalman filter
  */
 UKF::UKF() {
+  debug = true;
   // if this is false, laser measurements will be ignored (except during init)
   use_laser_ = true;
   // if this is false, radar measurements will be ignored (except during init)
@@ -22,13 +23,13 @@ UKF::UKF() {
   P_ = MatrixXd(5, 5);
   P_pre = MatrixXd(5, 5);
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 3;//30;
+  std_a_ = 2;//5~2
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.3;//30;
+  std_yawdd_ = 0.3;//0.5 ~ 0.2
   // Laser measurement noise standard deviation position1 in m
-  std_laspx_ = 0.02;//0.15;
+  std_laspx_ = 0.015;//0.15;
   // Laser measurement noise standard deviation position2 in m
-  std_laspy_ = 0.02;//0.15;
+  std_laspy_ = 0.015;//0.15;
   // Radar measurement noise standard deviation radius in m
   std_radr_ = 0.3;
   // Radar measurement noise standard deviation angle in rad
@@ -82,7 +83,6 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
    *  Initialization
    ****************************************************************************/
   if (!is_initialized_) {
-    cout << "UKF: " << endl;
     x_.fill(0.001);
     if (use_radar_ && meas_package.sensor_type_ == MeasurementPackage::RADAR) {
       float ro = meas_package.raw_measurements_(0);
@@ -345,7 +345,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
   K = Tc * S.inverse();
   //residual
   VectorXd z_diff = z - z_pred;
-
+  
   //update state mean and covariance matrix
   x_ = x_ + K*z_diff;
   P_ = P_ - K*S*K.transpose();
@@ -453,10 +453,6 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
 
   //residual
   VectorXd z_diff = z - z_pred;
-
-  //angle normalization
-  while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
-  while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
 
   //update state mean and covariance matrix
   x_ = x_ + K*z_diff;

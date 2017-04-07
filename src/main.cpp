@@ -221,16 +221,31 @@ int main(int argc, char* argv[]) {
   }
 
   // compute the accuracy (RMSE)
-  cout << "Accuracy - RMSE:" << endl << CalculateRMSE(estimations, ground_truth) << endl;
-  //float NISradar = NIS_radar/(float) ukf.rcount * 100;
-  cout <<"be better than [0.0750, 0.0732, 0.488, 0.537] for 1" << endl;
-  cout <<"be better than [0.179, 0.190, 0.439, 0.843] for 2" << endl;
-  cout <<"The radar NIS btw 0.35 and 7.81 accounts for " << NIS_radar/(float) ukf.rcount * 100 << "%" << endl;
-  cout << NIS_radar << " " << ukf.rcount << endl;
-  //float NISlaser = NIS_laser/(float) ukf.lcount * 100;
-  cout <<"The laser NIS btw 0.35 and 5.99 accounts for " << NIS_laser/(float) ukf.lcount * 100 << "%" << endl;
-  cout << NIS_laser << " " << ukf.lcount << endl;
-  
+  VectorXd sv = CalculateRMSE(estimations, ground_truth);
+  float rNIS = NIS_radar/(float) ukf.rcount;
+  float lNIS = NIS_laser/(float) ukf.lcount;
+  cout.precision(3);
+  cout << "UKF Accuracy (NIS: "<< rNIS << ")" << endl;
+  cout << "RMSE = [" << sv.transpose() <<"]" << endl;
+  if (ukf.debug) {
+    char num = in_file_name_[in_file_name_.length()-5];
+    if (num == '1') {
+      cout <<"Ref1 = [0.0750 0.0732  0.488  0.537]" << endl;
+    } else {
+      cout <<"Ref2 = [0.179 0.190 0.439 0.843]" << endl;
+    }
+    cout << "Configuration parameters: " << endl;
+    cout << "std_a_ = " << ukf.std_a_ << endl;
+    cout << "std_yawdd_ = " << ukf.std_yawdd_ << endl;
+    cout << "std_laspy_ =" << ukf.std_laspy_ << endl;
+    cout << "std_radr_ =" << ukf.std_radr_ << endl;
+    cout << "std_radphi_ =" << ukf.std_radphi_ << endl;
+    cout << "std_radrd_ =" << ukf.std_radrd_ << endl;  
+    cout <<"radar NIS btw 0.35 and 7.81"; 
+    cout << " (" << rNIS << " = " << NIS_radar << "/" << ukf.rcount << ")" << endl;
+    cout <<"laser NIS btw 0.35 and 5.99"; 
+    cout << " (" << lNIS << " = " << NIS_laser << "/" << ukf.lcount << ")" << endl;
+  }  
   // close files
   if (out_file_.is_open()) {
     out_file_.close();
