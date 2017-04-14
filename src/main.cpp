@@ -230,9 +230,9 @@ int main(int argc, char* argv[]) {
   if (ukf.debug) {
     char num = in_file_name_[in_file_name_.length()-5];
     if (num == '1') {
-      cout <<"Ref1 = [0.0750 0.0732  0.488  0.537]" << endl;
+      cout <<"Ref1 = [0.09   0.09    0.65   0.65]" << endl;
     } else {
-      cout <<"Ref2 = [0.179 0.190 0.439 0.843]" << endl;
+      cout <<"Ref2 = [0.20  0.20  0.55  0.55]" << endl;
     }
     cout <<"radar NIS btw 0.35 and 7.81"; 
     cout << " (" << rNIS << " = " << NIS_radar << "/" << ukf.rcount << ")" << endl;
@@ -241,6 +241,7 @@ int main(int argc, char* argv[]) {
     cout << "Configuration parameters: " << endl;
     cout << "std_a_ = " << ukf.std_a_ << endl;
     cout << "std_yawdd_ = " << ukf.std_yawdd_ << endl;
+    cout << "std_laspx_ = " << ukf.std_laspx_ << endl;
     cout << "std_laspy_ =" << ukf.std_laspy_ << endl;
     cout << "std_radr_ =" << ukf.std_radr_ << endl;
     cout << "std_radphi_ =" << ukf.std_radphi_ << endl;
