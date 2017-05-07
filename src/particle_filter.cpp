@@ -88,11 +88,6 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> landmarks, std::ve
 				min_dist = dist_val;
 			}
 		}
-		if (0) {
-			cout << "tobs id: " << obs.id-1 << "(" << obs.x << ", " << obs.y << ")" << endl;
-			cout << "land (" << landmarks[obs.id-1].x << ", " << landmarks[obs.id-1].y << ")" << endl;
-			//assert(min_dist < std::numeric_limits<unsigned int>::max());
-		}
 	}
 }
 
@@ -132,19 +127,19 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	    	//cout << "A obs [" << obs.id << "] (" << obs.x << ", " << obs.y << ")" << endl;
 	    }
 
-	    std::vector<LandmarkObs> inrange_landmarks;
+	    std::vector<LandmarkObs> ilandmarks;
         std::map<int, Map::single_landmark_s> idx2landmark;
         for (const auto& lan:map_landmarks.landmark_list){
             double distance = dist(lan.x_f, lan.y_f, particles[i].x, particles[i].y);
             if (distance <= sensor_range){
-                inrange_landmarks.push_back(LandmarkObs{ lan.id_i,lan.x_f,lan.y_f });
+                ilandmarks.push_back(LandmarkObs{lan.id_i,lan.x_f,lan.y_f});
                 idx2landmark.insert(std::make_pair(lan.id_i, lan)); // log the landmark so that it can be used later
             }
         }
 
-        if (inrange_landmarks.size() > 0) {
+        if (ilandmarks.size() > 0) {
 
-		    dataAssociation(inrange_landmarks, observations);
+		    dataAssociation(ilandmarks, observations);
 
 		    double min_dist =  std::numeric_limits<unsigned int>::max();
 		    particles[i].weight = 1;
