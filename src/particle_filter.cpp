@@ -30,7 +30,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
     std::normal_distribution<double> ndy(y, std[1]);
     std::normal_distribution<double> ndt(theta, std[2]);
 
-	num_particles = 100;
+	num_particles = 10;
 	weights = std::vector<double>(num_particles);
 	particles = std::vector<Particle>(num_particles);
 	for (int i=0; i < num_particles; i++) {
@@ -40,6 +40,12 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 		particles[i].theta = ndt(gen);
 		particles[i].weight = 1.0;
 		weights[i] = 1.0;
+		if (0) {
+			cout << particles[i].x << ", " << particles[i].y << ", " << particles[i].theta << endl;
+		}
+	}
+	if (0) {
+		exit(0);
 	}
 	is_initialized = true;
 
@@ -118,18 +124,20 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	for (int i=0; i < num_particles; i++) {
 		//cout << "particle["<<i <<"]"<<endl;
 		//convert car coordinates into map coordinates
-		for (auto& obs : observations) {
+		std::vector<LandmarkObs> tobservations;
+		//tobs.resize(observations.size());
+		for (const auto obs : observations) {
 	    	//cout << "B obs [" << obs.id << "] (" << obs.x << ", " << obs.y << ")" << endl;
-	    	double obsx = obs.x;
-	    	double obsy = obs.y;
-	    	obs.x = cos(particles[i].theta)*obsx - sin(particles[i].theta)*obsy + particles[i].x;
-	    	obs.y = sin(particles[i].theta)*obsx + cos(particles[i].theta)*obsy + particles[i].y;
+	    	//double obsx = obs.x;
+	    	//double obsy = obs.y;
+	    	double tobsx = cos(particles[i].theta)*obs.x - sin(particles[i].theta)*obs.y + particles[i].x;
+	    	double tobsy = sin(particles[i].theta)*obs.x + cos(particles[i].theta)*obs.y + particles[i].y;
+	    	tobservations.push_back(LandmarkObs{obs.id, tobsx, tobsy});
 	    	//cout << "A obs [" << obs.id << "] (" << obs.x << ", " << obs.y << ")" << endl;
 	    }
-
 	    std::vector<LandmarkObs> ilandmarks;
         std::map<int, Map::single_landmark_s> idx2landmark;
-        for (const auto& lan:map_landmarks.landmark_list){
+        for (const auto& lan : map_landmarks.landmark_list){
             double distance = dist(lan.x_f, lan.y_f, particles[i].x, particles[i].y);
             if (distance <= sensor_range){
                 ilandmarks.push_back(LandmarkObs{lan.id_i,lan.x_f,lan.y_f});
@@ -139,15 +147,15 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
         if (ilandmarks.size() > 0) {
 
-		    dataAssociation(ilandmarks, observations);
+		    dataAssociation(ilandmarks, tobservations);
 
 		    double min_dist =  std::numeric_limits<unsigned int>::max();
 		    particles[i].weight = 1;
-			for (const auto obs : observations) {
-				double lx = idx2landmark[obs.id].x_f;
-		    	double ly = idx2landmark[obs.id].y_f;
-				double tx = obs.x;
-		    	double ty = obs.y;
+			for (const auto tobs : tobservations) {
+				double lx = idx2landmark[tobs.id].x_f;
+		    	double ly = idx2landmark[tobs.id].y_f;
+				double tx = tobs.x;
+		    	double ty = tobs.y;
 		    	//if (dist(par.x, par.y, lx, ly) <= sensor_range) {
 				//assert(min_dist < std::numeric_limits<unsigned int>::max());
 					double x_diff = pow(tx-lx,2)/(2*pow(std_x,2));
@@ -167,7 +175,11 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		} else {
 			weights[i] = 0.0;
 		}
+		if (0) {
+			cout << particles[i].x << ", " << particles[i].y << ", " << particles[i].weight << endl;
+		}
 	}
+	//exit(0);
 }
 
 void ParticleFilter::resample() {
@@ -176,11 +188,12 @@ void ParticleFilter::resample() {
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
 	std::default_random_engine gen;
     std::vector<Particle> resampled_particles;
+    resampled_particles.resize(num_particles);
     //resampled_particles = std::vector<Particle>(num_particles);
     std::discrete_distribution<> d(weights.begin(), weights.end());
     //std::map<int, int> m;
     for(int i=0; i<num_particles; ++i) {
-        resampled_particles.push_back(particles[d(gen)]);
+        resampled_particles[i] = particles[d(gen)];
     }
     particles=resampled_particles;
 }
