@@ -36,7 +36,7 @@ PID controller is a technique by to minimize the cross track error (CTE). The CT
 
 ## Tuning of Parameters
 
-We start off by manually tuning P and D parameters first. Once the vehicle runs on track to a certain degree, the parameters are fine-tuned with twiddle() applied.
+We start off by manually tuning P and D parameters first. Once the vehicle runs on track to a certain degree, we set I parameter to a reasonably large value e.g., 2. The parameters can be fine-tuned with twiddle() applied.
 
 ## Reference
 
