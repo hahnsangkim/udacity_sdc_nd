@@ -41,8 +41,8 @@ const double coeff_c_repsi          = 64;
 const double coeff_c_rv             = 1;
 const double coeff_c_rval_throttle  = 16;
 const double coeff_c_rval_steering  = 160;
-const double coeff_c_rseq_throttle  = 32;
-const double coeff_c_rseq_steering  = 6400;
+const double coeff_c_rseq_throttle  = 500;
+const double coeff_c_rseq_steering  = 500;
 
 
 class FG_eval {

@@ -114,7 +114,7 @@ int main() {
           }
 
           /*** Polyfit to get coefficients ***/
-          auto coeffs = polyfit(x_c, y_c, 3);
+          auto coeffs = polyfit(x_c, y_c, 2);
           //cout << "coeffs\t" << coeffs << endl ;
 
           /*** Calculate Errors: cte, epsi ***/
