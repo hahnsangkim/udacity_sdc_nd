@@ -4,14 +4,16 @@ Self-Driving Car Engineer Nanodegree Program
 ---
 
 ## Visual Output
-[MPC-controller GTA](https://youtu.be/ptBV-HJAnfs)
+[MPC-controlled Driving Video](https://youtu.be/ptBV-HJAnfs)
 
 ## Overview of the Model
 
 ![state](img/km-state.png)
 ### Update equations
 ![*](img/kinematic_model.png)
+
 ![*](img/km-cte1.png)
+
 ![*](img/km-oe1.png)
 
 Student describes their model in detail. This includes the state, actuators and update equations
