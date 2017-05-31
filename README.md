@@ -31,28 +31,29 @@ where a can take value between and including -1 and 1.
 #### Cross Track Error
 We can express the error between the center of the road and the vehicle's position as the cross track error:
 ![*](img/km-cte1.png)
+
 In this case cte at t can be expressed as the difference between the line and the current vehicle position y. Assuming the reference line is a 1st order polynomial f:
 cte =f(x)−y
 
 #### Orientation Error
-now let’s take a look at the orientation error:
+Now let’s take a look at the orientation error:
+
 ![*](img/km-oe1.png)
-The update rule is essentially the same as ψ.
+
+he update rule is essentially the same as ψ.
 eψ is the desired orientation subtracted from the current orientation.
 
 ​We already know ψ, because it’s part of our state. We don’t yet know ψdes - all we have so far is a polynomial to follow. ψdes can be calculated as the tangential angle of the polynomial f evaluated at x, arctan(f′(x)). f′ is the derivative of the polynomial.
 
 ### Preprocess waypoints, vehicle state
 The global positions of the waypoints and vehicles need to be converted into car coordinates. To do so, I apply equations that I used in P3, which are the following:
-$ x_c = (ptsx - px) * cos(ψ) + (ptsy - py) * sin(ψ) $
-$ y_c = (ptsy - py) * cos(ψ) - (ptsx - px) * sin(ψ) $
+
+x_c = (ptsx - px) * cos(ψ) + (ptsy - py) * sin(ψ)
+
+y_c = (ptsy - py) * cos(ψ) - (ptsx - px) * sin(ψ)
+
 where ptsx and ptsy are global positions of the waypoints, px and py are global positions of the vehicle. x_c and y_c are inputs to polyfit, returning coeffients of a fit, f(x).
 
-
-px = v * dt
-ψ = - v / Lf * δ * dt
-cte = f(0)
-eψ = arctan(f'(0))
 
 ### Prediction horizon
 The prediction horizon is the duration over which future predictions are made, which is referred to this as T. T is the product of two other variables, N and dt. N is the number of timesteps in the horizon. dt is how much time elapses between actuations. In my case, if N is 20 and dt is 0.05, then T becomes 1 second. T should be as large as possible, while dt should be as small as possible.
