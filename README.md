@@ -6,7 +6,7 @@ Self-Driving Car Engineer Nanodegree Program
 ## Visual Output
 [MPC-controlled Driving Video](https://youtu.be/ptBV-HJAnfs)
 
-## Overview of the Model
+### The Model
 The model keep track of the state of a vehicle. The state is represented as
 ![state](img/km-state.png), where x and y are positions of the vehicle, ψ is a multiplicative factor of the steering angle, δ , v is the velocity, cte is the cross track error, and eψ is the error of psi. 
 
