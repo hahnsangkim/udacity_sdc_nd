@@ -20,10 +20,8 @@ Student describes their model in detail. This includes the state, actuators and 
 
 ### Preprocess waypoints, vehicle state
 The global positions of the waypoints and vehicles need to be converted into car coordinates. To do so, I apply equations that I used in P3, which are the following:
-\begin{equation}
-  x_c = (ptsx - px) * cos(\psi) + (ptsy - py) * sin(\psi)
-  y_c = (ptsy - py) * cos(\psi) - (ptsx - px) * sin(\psi)
-\end{equation}
+$ x_c = (ptsx - px) * cos(\psi) + (ptsy - py) * sin(\psi) $
+$ y_c = (ptsy - py) * cos(\psi) - (ptsx - px) * sin(\psi) $
 where ptsx and ptsy are global positions of the waypoints, px and py are global positions of the vehicle. x_c and y_c are inputs to polyfit, returning coeffients of a fit, f(x).
 
 
