@@ -8,37 +8,51 @@ Self-Driving Car Engineer Nanodegree Program
 
 ## Overview of the Model
 The model keep track of the state of a vehicle. The state is represented as
-![state](img/km-state.png)
+![state](img/km-state.png), where x and y are positions of the vehicle, ψ is a multiplicative factor of the steering angle, δ , v is the velocity, cte is the cross track error, and eψ is the error of psi. 
 
-x and y are positions of the vehicle, psi is a steering angle, v is the velocity, cte is the cross track error, and epsi is the error of psi. 
+Actuator inputs allow us to control the vehicle state. Most cars have three actuators: the steering wheel, the throttle pedal and the brake pedal. For simplicity we'll consider the throttle and brake pedals as a singular actuator, with negative values signifying braking and positive values signifying acceleration. This reduces the vehicle to two actuators ![*](img/km-actuators.png), which we'll denote as δ for steering angle and a for acceleration (throttle/brake combined).
 
-The goal of the model is to optimize vales of actuators
-![*](img/km-actuators.png)
-we denote as δ for steering angle and a for acceleration.
 
 ### Update equations
 ![*](img/kinematic_model.png)
 
+Lf measures the distance between the front of the vehicle and its center of gravity. The larger the vehicle, the slower the turn rate.
+
+If you've driven a vehicle you're well aware at higher speeds you turn quicker than at lower speeds. This is why v is the included in the update.
+
+On the topic of running a vehicle around in a circle, this is actually a good way to test the validity of a model! If the radius of the circle generated from driving the test vehicle around in a circle with a constant velocity and steering angle is similar to that of your model in the simulation, then you're on the right track.
+
+The vehicle started at the origin, oriented at 0 degrees and was then simulated driving with a δ value of 1 degree and Lf​​ value of 2.67.
+
+Finally, let's take a look at how the velocity, v is modeled:
+v=v+a∗dt
+where a can take value between and including -1 and 1.
+
+#### Cross Track Error
+We can express the error between the center of the road and the vehicle's position as the cross track error:
 ![*](img/km-cte1.png)
+In this case cte at t can be expressed as the difference between the line and the current vehicle position y. Assuming the reference line is a 1st order polynomial f:
+cte =f(x)−y
 
+#### Orientation Error
+now let’s take a look at the orientation error:
 ![*](img/km-oe1.png)
+The update rule is essentially the same as ψ.
+eψ is the desired orientation subtracted from the current orientation.
 
-Student describes their model in detail. This includes the state, actuators and update equations
+​We already know ψ, because it’s part of our state. We don’t yet know ψdes - all we have so far is a polynomial to follow. ψdes can be calculated as the tangential angle of the polynomial f evaluated at x, arctan(f′(x)). f′ is the derivative of the polynomial.
 
 ### Preprocess waypoints, vehicle state
 The global positions of the waypoints and vehicles need to be converted into car coordinates. To do so, I apply equations that I used in P3, which are the following:
-$ x_c = (ptsx - px) * cos(\psi) + (ptsy - py) * sin(\psi) $
-$ y_c = (ptsy - py) * cos(\psi) - (ptsx - px) * sin(\psi) $
+$ x_c = (ptsx - px) * cos(ψ) + (ptsy - py) * sin(ψ) $
+$ y_c = (ptsy - py) * cos(ψ) - (ptsx - px) * sin(ψ) $
 where ptsx and ptsy are global positions of the waypoints, px and py are global positions of the vehicle. x_c and y_c are inputs to polyfit, returning coeffients of a fit, f(x).
 
 
 px = v * dt
-\psi = - v / Lf * \theta * dt
+ψ = - v / Lf * δ * dt
 cte = f(0)
-e\psi = arctan(f'(0))
-
-
-
+eψ = arctan(f'(0))
 
 ### Prediction horizon
 The prediction horizon is the duration over which future predictions are made, which is referred to this as T. T is the product of two other variables, N and dt. N is the number of timesteps in the horizon. dt is how much time elapses between actuations. In my case, if N is 20 and dt is 0.05, then T becomes 1 second. T should be as large as possible, while dt should be as small as possible.
@@ -89,72 +103,7 @@ A good approach to setting N, dt, and T is to first determine a reasonable range
 
 ## Basic Build Instructions
 
-
 1. Clone this repo.
 2. Make a build directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./mpc`.
-
-## Tips
-
-1. It's recommended to test the MPC on basic examples to see if your implementation behaves as desired. One possible example
-is the vehicle starting offset of a straight line (reference). If the MPC implementation is correct, after some number of timesteps
-(not too many) it should find and track the reference line.
-2. The `lake_track_waypoints.csv` file has the waypoints of the lake track. You could use this to fit polynomials and points and see of how well your model tracks curve. NOTE: This file might be not completely in sync with the simulator so your solution should NOT depend on it.
-3. For visualization this C++ [matplotlib wrapper](https://github.com/lava/matplotlib-cpp) could be helpful.
-
-## Editor Settings
-
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
-
-* indent using spaces
-* set tab width to 2 spaces (keeps the matrices in source code aligned)
-
-## Code Style
-
-Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
-
-## Project Instructions and Rubric
-
-Note: regardless of the changes you make, your project must be buildable using
-cmake and make!
-
-More information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/b1ff3be0-c904-438e-aad3-2b5379f0e0c3/concepts/1a2255a0-e23c-44cf-8d41-39b8a3c8264a)
-for instructions and the project rubric.
-
-## Hints!
-
-* You don't have to follow this directory structure, but if you do, your work
-  will span all of the .cpp files here. Keep an eye out for TODOs.
-
-## Call for IDE Profiles Pull Requests
-
-Help your fellow students!
-
-We decided to create Makefiles with cmake to keep this project as platform
-agnostic as possible. Similarly, we omitted IDE profiles in order to we ensure
-that students don't feel pressured to use one IDE or another.
-
-However! I'd love to help people get up and running with their IDEs of choice.
-If you've created a profile for an IDE that you think other students would
-appreciate, we'd love to have you add the requisite profile files and
-instructions to ide_profiles/. For example if you wanted to add a VS Code
-profile, you'd add:
-
-* /ide_profiles/vscode/.vscode
-* /ide_profiles/vscode/README.md
-
-The README should explain what the profile does, how to take advantage of it,
-and how to install it.
-
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
-repo root to avoid clutter. My expectation is that most profiles will include
-instructions to copy files to a new location to get picked up by the IDE, but
-that's just a guess.
-
-One last note here: regardless of the IDE used, every submitted project must
-still be compilable with cmake and make./
