@@ -7,8 +7,15 @@ Self-Driving Car Engineer Nanodegree Program
 [MPC-controlled Driving Video](https://youtu.be/ptBV-HJAnfs)
 
 ## Overview of the Model
-
+The model keep track of the state of a vehicle. The state is represented as
 ![state](img/km-state.png)
+
+x and y are positions of the vehicle, psi is a steering angle, v is the velocity, cte is the cross track error, and epsi is the error of psi. 
+
+The goal of the model is to optimize vales of actuators
+![*](img/km-actuators.png)
+we denote as δ for steering angle and a for acceleration.
+
 ### Update equations
 ![*](img/kinematic_model.png)
 
