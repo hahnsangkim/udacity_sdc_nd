@@ -3,6 +3,42 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Visual Output
+[MPC-controller GTA](https://youtu.be/ptBV-HJAnfs)
+
+## Overview of the Model
+
+![state](img/km-state.png)
+### Update equations
+![*](img/kinematic_model.png)
+![*](img/km-cte1.png)
+![*](img/km-oe1.png)
+
+Student describes their model in detail. This includes the state, actuators and update equations
+
+### Preprocess waypoints, vehicle state
+The global positions of the waypoints and vehicles need to be converted into car coordinates. To do so, I apply equations that I used in P3, which are the following:
+  x_c = (ptsx - px) * cos(\psi) + (ptsy - py) * sin(\psi)
+  y_c = (ptsy - py) * cos(\psi) - (ptsx - px) * sin(\psi)
+where ptsx and ptsy are global positions of the waypoints, px and py are global positions of the vehicle. x_c and y_c are inputs to polyfit, returning coeffients of a fit, f(x).
+
+
+px = v * dt
+\psi = - v / Lf * \theta * dt
+cte = f(0)
+e\psi = arctan(f'(0))
+
+
+
+
+### Prediction horizon
+The prediction horizon is the duration over which future predictions are made, which is referred to this as T. T is the product of two other variables, N and dt. N is the number of timesteps in the horizon. dt is how much time elapses between actuations. In my case, if N is 20 and dt is 0.05, then T becomes 1 second. T should be as large as possible, while dt should be as small as possible.
+
+The goal of Model Predictive Control is to optimize the control inputs: [\psi,{a}]. An optimizer will tune these inputs until a low cost vector of control inputs is found. The length of this vector is determined by N. 
+
+A good approach to setting N, dt, and T is to first determine a reasonable range for T and then tune dt and N appropriately, keeping the effect of each in mind.
+
+
 ## Dependencies
 
 * cmake >= 3.5
