@@ -23,7 +23,7 @@ double dt = 0.1;
 const double Lf = 2.67;
 double rcte = 0;
 double repsi = 0;
-double rv = 55; //speed
+double rv = 40; //speed
 
 // starting points for solver
 size_t x_start      = 0 ;

@@ -4,7 +4,7 @@ Self-Driving Car Engineer Nanodegree Program
 ---
 
 ## Visual Output
-[MPC-controlled Driving Video](https://youtu.be/toyf9rNv9Jk)
+[MPC-controlled Driving Video](https://youtu.be/KSuGIss1bV4)
 
 ### The Model
 The model keep track of the state of a vehicle. The state is represented as
