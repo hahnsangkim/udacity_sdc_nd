@@ -7,8 +7,8 @@ using CppAD::AD;
 using namespace std;
 
 // TODO: Set the timestep length and duration
-size_t N = 20;
-double dt = 0.05;
+size_t N = 10;
+double dt = 0.1;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -23,7 +23,7 @@ double dt = 0.05;
 const double Lf = 2.67;
 double rcte = 0;
 double repsi = 0;
-double rv = 64;
+double rv = 55; //speed
 
 // starting points for solver
 size_t x_start      = 0 ;
@@ -36,13 +36,13 @@ size_t delta_start  = epsi_start  + N ;
 size_t a_start      = delta_start + N - 1 ;
 
 // adjustment values for cost function
-const double coeff_c_rcte           = 320;
-const double coeff_c_repsi          = 64;
-const double coeff_c_rv             = 1;
-const double coeff_c_rval_throttle  = 16;
-const double coeff_c_rval_steering  = 160;
+const double coeff_c_rcte           = .8;
+const double coeff_c_repsi          = 200;
+const double coeff_c_rv             = .8;
+const double coeff_c_rval_throttle  = 10;
+const double coeff_c_rval_steering  = 10;
 const double coeff_c_rseq_throttle  = 500;
-const double coeff_c_rseq_steering  = 500;
+const double coeff_c_rseq_steering  = 10; //1;
 
 
 class FG_eval {
@@ -106,16 +106,18 @@ class FG_eval {
       AD<double> v_t0 = vars[v_start + i];
       AD<double> psi_t0 = vars[psi_start + i];
       AD<double> cte_t0 = vars[cte_start + i];
-      AD<double> e_psi_t0 = vars[epsi_start + i];
+      AD<double> epsi_t0 = vars[epsi_start + i];
 
       AD<double> delta_t0 = vars[delta_start + i];
       AD<double> a_t0 = vars[a_start + i];
 
       // for 3rd degree polynomial
-      AD<double> f_t0 = coeffs[0] + coeffs[1] * x_t0 + coeffs[2] * x_t0 * x_t0;
+      AD<double> f_t0 = coeffs[0] + coeffs[1] * x_t0 + 
+                    coeffs[2] * pow(x_t0, 2) + coeffs[3] * pow(x_t0, 3);
       
       // rate of cahnge of f0
-      AD<double> f_t0_rate_of_change = coeffs[1] + coeffs[2] * x_t0 * x_t0;       
+      AD<double> f_t0_rate_of_change = coeffs[1] + 2 * coeffs[2] * x_t0 + 
+                           3 * coeffs[3] * pow(x_t0,2);       
        
       AD<double> psides_t0 = CppAD::atan( f_t0_rate_of_change);
 
@@ -123,10 +125,10 @@ class FG_eval {
       fg[2 + y_start + i] = y_t1 - (y_t0 + v_t0 * CppAD::sin(psi_t0) * dt);
 
       fg[2 + psi_start + i] = psi_t1 - (psi_t0 + v_t0 / Lf * delta_t0 * dt);
-      fg[2 + v_start + i] = v_t1   - (v_t0 - a_t0 * dt);
+      fg[2 + v_start + i] = v_t1 - (v_t0 + a_t0 * dt);
 
-      fg[2 + cte_start + i] = cte_t1 - ((f_t0-y_t0) + (v_t0*CppAD::sin(e_psi_t0)*dt));
-      fg[2 + epsi_start + i] = e_psi_t1 - ((psi_t0+psides_t0) + v_t0*delta_t0/Lf*dt ) ;
+      fg[2 + cte_start + i] = cte_t1 - ((f_t0-y_t0) + (v_t0 * CppAD::sin(epsi_t0) * dt));
+      fg[2 + epsi_start + i] = e_psi_t1 - ((psi_t0 - psides_t0) + v_t0 * delta_t0 / Lf * dt ) ;
     }
   }
 };
@@ -135,8 +137,8 @@ class FG_eval {
 // MPC class definition implementation.
 //
 MPC::MPC() {
-  this->N_ = N;
-  this->dt_ = dt;
+  //this->N_ = N;
+  //this->dt_ = dt;
 
 }
 MPC::~MPC() {}
@@ -167,7 +169,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // SHOULD BE 0 besides initial state.
   Dvector vars(n_vars);
   for (int i = 0; i < n_vars; i++) {
-    vars[i] = 0;
+    vars[i] = 0.;
   }
   vars[x_start] = x;
   vars[y_start] = y;
@@ -260,27 +262,27 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
+  this->mpc_x = {};
+  this->mpc_y = {};
 
-  this->steering_angle = solution.x[delta_start];
-  this->throttle = solution.x[a_start];
+  for (int i = 0; i < state.size();i++){
+    this->mpc_x.push_back(solution.x[x_start+1+i]);
+    this->mpc_y.push_back(solution.x[y_start+1+i]);
+  }
 
   //cout << "steering_angle" << solution.x[delta_start] << 
   //"throttle" << solution.x[a_start] << endl;
 
   vector<double> results;
 
-  for (int i = 0; i < N - 1; i++){
-    results.push_back(solution.x[x_start + 1 + i]);
-    results.push_back(solution.x[y_start + 1 + i]);
-  }
-
+  results.push_back(solution.x[x_start + 1]);
+  results.push_back(solution.x[y_start + 1]);
   results.push_back(solution.x[psi_start + 1]);
   results.push_back(solution.x[v_start + 1]);
   results.push_back(solution.x[cte_start + 1]);
   results.push_back(solution.x[epsi_start + 1]);
-
-  results.push_back(solution.x[delta_start + 1]);
-  results.push_back(solution.x[a_start + 1]);
+  results.push_back(solution.x[delta_start]);
+  results.push_back(solution.x[a_start]);
 
   return results;
 }
