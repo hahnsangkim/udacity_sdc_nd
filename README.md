@@ -27,36 +27,36 @@ The goal of this project is to safely navigate around a virtual highway with oth
 
 ### Main car's localization Data (No Noise)
 
-["x"] The car's x position in map coordinates
+["**x**"] The car's x position in map coordinates
 
-["y"] The car's y position in map coordinates
+["**y**"] The car's y position in map coordinates
 
-["s"] The car's s position in frenet coordinates
+["**s**"] The car's s position in frenet coordinates
 
-["d"] The car's d position in frenet coordinates
+["**d**"] The car's d position in frenet coordinates
 
-["yaw"] The car's yaw angle in the map
+["**yaw**"] The car's yaw angle in the map
 
-["speed"] The car's speed in MPH
+["**speed**"] The car's speed in MPH
 
 
 ### Sensor Fusion Data
 
 ["sensor_fusion"] is a 2D vector for each car, [ id, x, y, vx, vy, s, d]
 
-["id"] A car's unique ID
+**id**: A car's unique ID
 
-["x"] car's x position in map coordinates
+**x**: car's x position in map coordinates
 
-["y"] car's y position in map coordinates
+**y**: car's y position in map coordinates
 
-["vx"] car's x velocity in m/s
+**vx**: car's x velocity in m/s
 
-["vy"] car's y velocity in m/s
+**vy**: car's y velocity in m/s
 
-["s"] car's s position in frenet coordinates
+**s**: car's s position in frenet coordinates
 
-["d"] car's d position in frenet coordinates
+**d**: car's d position in frenet coordinates
 
 The vx, vy values can be useful for predicting where the cars will be in the future. For instance, if we assume that the tracked car kept moving along the road, then its future predicted Frenet s value will be its current s value plus its (transformed) total velocity (m/s) multiplied by the time elapsed into the future (s).
 
@@ -68,18 +68,18 @@ The highway's waypoints loop around so the frenet s value, distance along the ro
 
 ### Previous path data given to the Planner
 
-//Note: Return the previous list but with processed points removed, can be a nice tool to show how far along the path has processed since last time. 
+Note: Return the previous list but with processed points removed, can be a nice tool to show how far along the path has processed since last time. 
 
-["previous_path_x"] The previous list of x points previously given to the simulator
+["**previous_path_x**"] The previous list of x points previously given to the simulator
 
-["previous_path_y"] The previous list of y points previously given to the simulator
+["**previous_path_y**"] The previous list of y points previously given to the simulator
 
 
 #### Previous path's end s and d values 
 
-["end_path_s"] The previous list's last point's frenet s value
+["**end_path_s**"] The previous list's last point's frenet s value
 
-["end_path_d"] The previous list's last point's frenet d value
+["**end_path_d**"] The previous list's last point's frenet d value
 
 
 ## Details
