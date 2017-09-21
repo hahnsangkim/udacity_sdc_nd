@@ -3,6 +3,7 @@
 In this project, you'll label the pixels of a road in images using a Fully Convolutional Network (FCN).
 
 ![FCN Architecture](FCNarch.png)
+
 Source: http://jeremyshannon.com/blog/
 
 ### Setup
@@ -65,3 +66,9 @@ and ended up having below 0.01.
  ![Demo: Cambridge - SegNet](http://mi.eng.cam.ac.uk/projects/segnet/demo.php#demo)
 
  ![Demo: Oxford-Semantic Image Segmentation Live Demo](http://www.robots.ox.ac.uk/~szheng/crfasrnndemo)
+
+ ![Guide to Semantic Segmentation with Deep Learning](http://blog.qure.ai/notes/semantic-segmentation-deep-learning-review)
+
+![Talk about SS](http://techtalks.tv/talks/fully-convolutional-networks-for-semantic-segmentation/61606/)
+
+![Fully Convolutional Networks for Semantic Segmentation](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf)
