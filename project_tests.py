@@ -68,8 +68,7 @@ def test_load_vgg(load_vgg, tf_module):
 
         input_image, keep_prob, vgg_layer3_out, vgg_layer4_out, vgg_layer7_out = load_vgg(sess, vgg_path)
 
-        assert mock_load_model.called, \
-            'tf.saved_model.loader.load() not called'
+        assert mock_load_model.called, 'tf.saved_model.loader.load() not called'
         assert mock_load_model.call_args == mock.call(sess, ['vgg16'], vgg_path), \
             'tf.saved_model.loader.load() called with wrong arguments.'
 
