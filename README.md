@@ -32,4 +32,4 @@ python main.py
  - `project_tests.py`
  - Newest inference images from `runs` folder
 
- ![Train log]('./trainlog.png')
+ ![Train log]('trainlog.png')
