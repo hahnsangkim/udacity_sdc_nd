@@ -32,4 +32,4 @@ jupyter notebook Traffic_Signs_Recognition.ipynb
 
 ### Reference
 
-![Kirill Danilyuk's work](https://towardsdatascience.com/convnets-series-image-processing-tools-of-the-trade-36e168836f0c)
+1. ![Kirill Danilyuk's work](https://towardsdatascience.com/convnets-series-image-processing-tools-of-the-trade-36e168836f0c)
