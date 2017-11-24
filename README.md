@@ -30,3 +30,6 @@ jupyter notebook Traffic_Signs_Recognition.ipynb
 ```
 3. Follow the instructions in the `Traffic_Signs_Recognition.ipynb` notebook.
 
+### Reference
+
+![Kirill Danilyuk's work](https://towardsdatascience.com/convnets-series-image-processing-tools-of-the-trade-36e168836f0c)
